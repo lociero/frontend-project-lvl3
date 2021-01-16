@@ -31,21 +31,21 @@ jobs:
       - name: npm install, build
         # Install and build project
         run: |
-          make install
+          npm i
         # Add environment variables
         env:
           CI: true
       - name: Run linter
         # Run Linter
         run: |
-          make lint
+          npm run lint
       - name: Test & publish code coverage
         # Publish code coverage on Code Climate
         # https://github.com/paambaati/codeclimate-action
-        uses: paambaati/codeclimate-action@v2.4.0
+        uses: paambaati/codeclimate-action@v2.7.5
         # Add Code Climate secret key
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
-          coverageCommand: make test-coverage
+          coverageCommand: npm run test-coverage
           debug: true
