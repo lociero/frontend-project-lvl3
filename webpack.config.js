@@ -19,8 +19,13 @@ module.exports = {
       },
     ],
   },
+  devServer: {
+    open: true,
+  },
   plugins: [
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: 'template.html',
+    }),
     new MiniCssExtractPlugin(),
     new CleanWebpackPlugin(),
   ],
