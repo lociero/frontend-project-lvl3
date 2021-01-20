@@ -21,8 +21,11 @@
   },
   "main": "src/index.js",
   "dependencies": {
-    "bootstrap": "^4.5.3"
-    
+    "axios": "^0.21.1",
+    "bootstrap": "^4.5.3",
+    "jquery": "^3.5.1",
+    "on-change": "^2.2.3",
+    "popper.js": "^1.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
