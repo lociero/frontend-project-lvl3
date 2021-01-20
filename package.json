@@ -25,7 +25,8 @@
     "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",
     "on-change": "^2.2.3",
-    "popper.js": "^1.16.1"
+    "popper.js": "^1.16.1",
+    "yup": "^0.32.8"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
