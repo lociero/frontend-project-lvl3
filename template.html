@@ -5,18 +5,20 @@
   <title>RSS Agregator</title>
 </head>
 
-<body>
-  <div class="container d-flex align-items-center mt-2">
+<body class="bg-dark">
+  <div class="container mt-2">
     <form class="col" data-testid="form_test">
       <div class="form-row">
-        <div class="col-md-10">
-          <input id="url_input" type="text" class="form-control" placeholder="RSS link">
+        <div class="col-sm-10">
+          <input required id="url_input" type="text" class="form-control" placeholder="RSS link">
         </div>
-        <div class="col-md-2">
+        <div class="col-sm-2">
           <button type="submit" class="btn btn-outline-primary w-100">ADD</button>
         </div>
       </div>
+      <p class="text-muted">Example: https://ru.hexlet.io/lessons.rss</p>
     </form>
+
 
     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">
       Launch demo modal
@@ -39,6 +41,15 @@
           </div>
         </div>
       </div>
+    </div>
+    <div id="main_container" class="container-fluid mt-5 mx-auto d-none">
+      <h2 class="text-light">Feeds</h2>
+      <ul class="list-group mb-5" id="feeds_list">
+        <!-- <li class="list-group-item list-group-item-dark">An item</li> -->
+      </ul>
+      <h2 class="text-light">Posts</h2>
+      <ul class="list-group" id="posts_list">
+      </ul>
     </div>
   </div>
 
