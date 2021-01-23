@@ -1,17 +1,9 @@
-class RSSError extends Error {
-  constructor(message) {
-    super();
-    this.type = 'rss';
-    this.name = 'ParsingError';
-    this.message = message;
-  }
-}
-
+import TypeError from './errors.js';
 // eslint-disable-next-line import/prefer-default-export
 export const parseRSS = (xmltext) => {
   const doc = new DOMParser().parseFromString(xmltext, 'application/xml');
   if (doc.querySelector('parsererror')) {
-    throw new RSSError();
+    throw new TypeError('rss', 'Not valid RSS');
   }
   const title = doc.querySelector('title').textContent;
   const description = doc.querySelector('description').textContent;
