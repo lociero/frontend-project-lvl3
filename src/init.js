@@ -1,21 +1,31 @@
 import axios from 'axios';
 import onChange from 'on-change';
 import * as yup from 'yup';
+import i18next from 'i18next';
 import 'bootstrap';
 // import $ from 'jquery';
 import render from './view.js';
 import { parseRSS } from './utils.js';
 import TypeError from './errors.js';
+import en from './locales/en.js';
 
 // const yup = !y.object ? y.default : y;
 const schema = yup.string().url().required();
 
+i18next.init({
+  lng: 'en',
+  debug: true,
+  resources: {
+    en,
+  },
+});
+
 const errors = {
-  url: 'Invalid URL',
-  required: 'Empty URL input',
-  rss: 'Invalid RSS data',
-  sameUrl: 'URL already exists in the list',
-  network: 'Network error',
+  url: i18next.t('errors.url'),
+  required: i18next.t('errors.required'),
+  rss: i18next.t('errors.rss'),
+  sameUrl: i18next.t('errors.sameUrl'),
+  network: i18next.t('errors.network'),
 };
 
 export default () => {
@@ -40,7 +50,9 @@ export default () => {
     e.preventDefault();
     schema.validate(input.value)
       .then(() => {
-        if (watchedState.urls.includes(input.value)) throw new TypeError('sameUrl', 'url exists');
+        if (watchedState.urls.includes(input.value)) {
+          throw new TypeError('sameUrl', 'url exists');
+        }
         return axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${input.value}`);
       })
       .then((res) => { console.log(res); return res; })
