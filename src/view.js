@@ -1,5 +1,4 @@
 const render = (state, elements) => {
-  console.log('rerender');
   const {
     input, errorText, feeds, posts,
   } = elements;

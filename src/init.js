@@ -1,11 +1,12 @@
-import axios from 'axios';
+/* eslint-disable no-param-reassign */
 import onChange from 'on-change';
 import * as yup from 'yup';
 import i18next from 'i18next';
+import _ from 'lodash';
 import 'bootstrap';
 // import $ from 'jquery';
 import render from './view.js';
-import { parseRSS } from './utils.js';
+import { downloadRSS } from './utils.js';
 import TypeError from './errors.js';
 import en from './locales/en.js';
 
@@ -28,6 +29,20 @@ const errors = {
   network: i18next.t('errors.network'),
 };
 
+const updatePosts = (watchedState, timeout = 5000) => {
+  const rssChanges = watchedState.urls.map((url) => downloadRSS(url)
+    .then(({ items: newPosts }) => {
+      const updatedPosts = _.unionBy(watchedState.posts, newPosts, 'guid');
+      watchedState.posts = updatedPosts;
+      watchedState.error = null;
+    })
+    .catch((err) => {
+      const type = err.type ?? 'network';
+      watchedState.error = { type, message: errors[type] };
+    }));
+  Promise.allSettled(rssChanges).then(() => setTimeout(() => updatePosts(watchedState), timeout));
+};
+
 export default () => {
   const state = {
     urls: [],
@@ -42,9 +57,10 @@ export default () => {
   const posts = document.querySelector('#posts_list');
   const watchedState = onChange(state, () => render(watchedState, {
     input, errorText, feeds, posts,
-  }));
+  }), console.log('state:', state));
 
   // https://ru.hexlet.io/lessons.rss
+  // http://lorem-rss.herokuapp.com/feed
   const form = document.querySelector('form');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -53,12 +69,10 @@ export default () => {
         if (watchedState.urls.includes(input.value)) {
           throw new TypeError('sameUrl', 'url exists');
         }
-        return axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${input.value}`);
+        return downloadRSS(input.value);
       })
-      .then((res) => { console.log(res); return res; })
-      .then((res) => parseRSS(res.data.contents))
       .then(({ title, description, items }) => {
-        watchedState.feeds.push({ title, description });
+        watchedState.feeds.push({ title, description, url: input.value });
         watchedState.posts.push(...items);
         watchedState.urls.push(input.value);
         watchedState.error = null;
@@ -66,9 +80,10 @@ export default () => {
       .catch((err) => {
         const type = err.type ?? 'network';
         watchedState.error = { type, message: errors[type] };
-        console.log(watchedState.error);
       });
   });
+
+  updatePosts(watchedState);
 
   // .then((parsed) => {
   //   console.log(parsed.firstChild.tagName);

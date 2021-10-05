@@ -1,5 +1,6 @@
+import axios from 'axios';
 import TypeError from './errors.js';
-// eslint-disable-next-line import/prefer-default-export
+
 export const parseRSS = (xmltext) => {
   const doc = new DOMParser().parseFromString(xmltext, 'application/xml');
   if (doc.querySelector('parsererror')) {
@@ -13,6 +14,7 @@ export const parseRSS = (xmltext) => {
     const link = item.querySelector('link').textContent;
     const itemDescription = item.querySelector('description').textContent;
     const guid = item.querySelector('guid').textContent;
+    console.log(guid, title, link, description);
 
     return {
       guid,
@@ -24,3 +26,7 @@ export const parseRSS = (xmltext) => {
 
   return { title, description, items };
 };
+
+export const downloadRSS = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${url}`)
+  .then((res) => { console.log(res); return res; })
+  .then((res) => parseRSS(res.data.contents));
