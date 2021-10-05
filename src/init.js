@@ -53,7 +53,7 @@ export default () => {
         if (watchedState.urls.includes(input.value)) {
           throw new TypeError('sameUrl', 'url exists');
         }
-        return axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${input.value}`);
+        return axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${input.value}`);
       })
       .then((res) => { console.log(res); return res; })
       .then((res) => parseRSS(res.data.contents))
