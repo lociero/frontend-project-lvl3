@@ -49,15 +49,22 @@ export default () => {
     feeds: [],
     posts: [],
     error: null,
+    modal: { title: '', content: '', link: '#' },
+    readIds: new Set(),
   };
 
   const input = document.querySelector('#url_input');
   const errorText = document.querySelector('#error_text');
   const feeds = document.querySelector('#feeds_list');
   const posts = document.querySelector('#posts_list');
+
+  const modalTitle = document.querySelector('#modal_title');
+  const modalContent = document.querySelector('#modal_body');
+  const modalLink = document.querySelector('#modal_link');
+
   const watchedState = onChange(state, () => render(watchedState, {
-    input, errorText, feeds, posts,
-  }), console.log('state:', state));
+    input, errorText, feeds, posts, modalTitle, modalContent, modalLink,
+  }));
 
   // https://ru.hexlet.io/lessons.rss
   // http://lorem-rss.herokuapp.com/feed
@@ -78,20 +85,11 @@ export default () => {
         watchedState.error = null;
       })
       .catch((err) => {
+        console.error(err);
         const type = err.type ?? 'network';
         watchedState.error = { type, message: errors[type] };
       });
   });
 
   updatePosts(watchedState);
-
-  // .then((parsed) => {
-  //   console.log(parsed.firstChild.tagName);
-  // });
-  // console.log($('#modal').modal);
-  // $('#modal').on('show.bs.modal', (event) => {
-  //   const button = $(event.relatedTarget);
-  //   const description = button.data('description');
-  //   $('.modal-body div').html(description);
-  // });
 };

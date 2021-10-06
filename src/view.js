@@ -1,6 +1,7 @@
+/* eslint-disable no-param-reassign */
 const render = (state, elements) => {
   const {
-    input, errorText, feeds, posts,
+    input, errorText, feeds, posts, modalTitle, modalContent, modalLink,
   } = elements;
   input.classList.remove('is-invalid');
   errorText.classList.add('d-none');
@@ -30,16 +31,37 @@ const render = (state, elements) => {
     posts.innerHTML = '';
     state.posts.forEach((post) => {
       const li = document.createElement('li');
-      li.classList.add('list-group-item', 'list-group-item-dark');
+      li.classList.add('list-group-item', 'list-group-item-dark', 'd-flex', 'justify-content-between');
       const a = document.createElement('a');
       a.textContent = post.title;
       a.setAttribute('href', post.link);
+      a.classList.add(state.readIds.has(post.guid) ? 'fw-normal' : 'fw-bold');
       li.append(a);
+      const showButton = document.createElement('button');
+      showButton.classList.add('btn', 'btn-primary', 'btn-sm');
+      showButton.dataset.bsToggle = 'modal';
+      showButton.dataset.bsTarget = '#modal';
+      showButton.textContent = 'Preview';
+      showButton.id = `show_${post.guid}`;
+      showButton.addEventListener('click', () => {
+        state.modal.title = post.title;
+        state.modal.content = post.description;
+        state.modal.link = post.link;
+        state.readIds.add(post.guid);
+      });
+      li.append(showButton);
       posts.append(li);
     });
   } else {
     container.classList.add('d-none');
   }
+
+  modalTitle.textContent = state.modal.title;
+  modalContent.textContent = state.modal.content;
+  modalLink.setAttribute('href', state.modal.link);
+//   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">
+//   Launch demo modal
+// </button>
   // alert(state.error);
 };
 
