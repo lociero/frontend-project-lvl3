@@ -16,7 +16,7 @@ const schema = yup.string().url().required();
 
 i18next.init({
   lng: 'ru',
-  debug: true,
+  // debug: true,
   resources: {
     ru,
   },

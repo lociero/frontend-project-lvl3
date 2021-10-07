@@ -1,8 +1,8 @@
 <div class="container mt-2">
   <form class="col mx-2" data-testid="form_test" id="main_form">
     <div class="input-group">
-      <input required id="url_input" type="text" class="form-control" placeholder="RSS link" aria-label="RSS link">
-      <button type="submit" class="btn btn-outline-primary" id="add_button">Add</button>
+      <input required name="url" id="url_input" type="text" class="form-control" placeholder="RSS link" aria-label="url">
+      <button type="submit" name="add" class="btn btn-outline-primary" id="add_button" aria-label="add">Add</button>
     </div>
     <p class="text-muted m-0" id="example_text">Example: https://ru.hexlet.io/lessons.rss</p>
     <p id="info_text" class="text-danger m-0 d-none"></p>

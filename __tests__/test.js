@@ -14,3 +14,7 @@ beforeEach(async () => {
 test('form init', () => {
   expect(screen.getByTestId('form_test')).toBeInTheDocument();
 });
+
+test('input init', () => {
+  expect(screen.getByRole('textbox', { name: 'url' })).toBeInTheDocument();
+});
