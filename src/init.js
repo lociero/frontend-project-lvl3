@@ -96,7 +96,7 @@ export default async () => {
         watchedState.isLoading = false;
       })
       .catch((err) => {
-        console.error(err);
+        console.log('err:', err);
         const type = err.type ?? 'network';
         watchedState.error = { type, message: errors[type] };
         watchedState.isSuccess = false;
