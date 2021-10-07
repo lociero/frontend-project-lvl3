@@ -101,6 +101,7 @@ export default async () => {
         watchedState.urls.push(elements.input.value);
         watchedState.error = null;
         watchedState.isSuccess = true;
+        elements.input.value = '';
       })
       .catch((err) => {
         console.error(err);
