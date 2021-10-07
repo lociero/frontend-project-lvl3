@@ -93,14 +93,13 @@ export default async () => {
         watchedState.error = null;
         watchedState.isSuccess = true;
         elements.input.value = '';
+        watchedState.isLoading = false;
       })
       .catch((err) => {
         console.error(err);
         const type = err.type ?? 'network';
         watchedState.error = { type, message: errors[type] };
         watchedState.isSuccess = false;
-      })
-      .finally(() => {
         watchedState.isLoading = false;
       });
   });

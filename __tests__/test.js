@@ -2,6 +2,7 @@ import { screen } from '@testing-library/dom';
 import '@testing-library/jest-dom';
 import { promises as fs } from 'fs';
 import path from 'path';
+import userEvent from '@testing-library/user-event';
 import init from '../src/init.js';
 
 beforeEach(async () => {
@@ -17,4 +18,17 @@ test('form init', () => {
 
 test('input init', () => {
   expect(screen.getByRole('textbox', { name: 'url' })).toBeInTheDocument();
+});
+
+test('validation (unique)', async () => {
+  const rssUrl = 'https://ru.hexlet.io/lessons.rss';
+  userEvent.type(screen.getByRole('textbox', { name: 'url' }), rssUrl);
+  userEvent.click(screen.getByRole('button', { name: 'add' }));
+
+  expect(await screen.findByText(/RSS успешно загружен/i)).toBeInTheDocument();
+
+  userEvent.type(screen.getByRole('textbox', { name: 'url' }), rssUrl);
+  userEvent.click(screen.getByRole('button', { name: 'add' }));
+
+  expect(await screen.findByText(/RSS уже существует/i)).toBeInTheDocument();
 });
