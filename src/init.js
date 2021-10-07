@@ -85,7 +85,7 @@ export default () => {
 
   // https://ru.hexlet.io/lessons.rss
   // http://lorem-rss.herokuapp.com/feed
-  const form = document.querySelector('form');
+  const form = document.querySelector('#main_form');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     schema.validate(elements.input.value)
