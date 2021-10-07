@@ -8,7 +8,7 @@ beforeEach(async () => {
   const pathToHtml = path.join(__dirname, '__fixtures__/index.html');
   const html = await fs.readFile(pathToHtml, 'utf-8');
   document.body.innerHTML = html;
-  init();
+  await init();
 });
 
 test('form init', () => {

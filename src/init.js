@@ -54,7 +54,7 @@ const updatePosts = (watchedState, timeout = 5000) => {
   Promise.allSettled(rssChanges).then(() => setTimeout(() => updatePosts(watchedState), timeout));
 };
 
-export default () => {
+export default async () => {
   const state = {
     urls: [],
     feeds: [],
