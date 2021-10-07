@@ -1,13 +1,17 @@
 /* eslint-disable no-param-reassign */
+import i18next from 'i18next';
+
 const render = (state, elements) => {
   const {
     input, infoText, feeds, posts, modalTitle, modalContent, modalLink,
   } = elements;
   input.classList.remove('is-invalid');
-  elements.feedsTitle.textContent = state.text.feeds;
-  elements.postsTitle.textContent = state.text.posts;
-  elements.addButton.textContent = state.text.add;
-  elements.exampleText.textContent = state.text.example;
+  elements.feedsTitle.textContent = i18next.t('content.feeds');
+  elements.postsTitle.textContent = i18next.t('content.posts');
+  elements.addButton.textContent = i18next.t('navigation.add');
+  elements.exampleText.textContent = i18next.t('content.example');
+  elements.input.readOnly = state.isLoading;
+  elements.addButton.disabled = state.isLoading;
   if (state.error) {
     if (state.error.type === 'url') {
       input.classList.add('is-invalid');
@@ -19,15 +23,11 @@ const render = (state, elements) => {
     return;
   }
   if (state.isSuccess) {
-    infoText.textContent = state.text.success;
+    infoText.textContent = i18next.t('info.success');
     infoText.classList.remove('text-danger');
     infoText.classList.add('text-success');
     infoText.classList.remove('d-none');
   }
-
-  // infoText.classList.add('text-danger');
-  // elements.successText.classList.remove('d-none');
-  // elements.successText.textContent = state.text.success;
 
   const container = document.querySelector('#main_container');
   if (state.feeds.length > 0) {
@@ -57,7 +57,7 @@ const render = (state, elements) => {
       showButton.classList.add('btn', 'btn-primary', 'btn-sm');
       showButton.dataset.bsToggle = 'modal';
       showButton.dataset.bsTarget = '#modal';
-      showButton.textContent = state.text.preview;
+      showButton.textContent = i18next.t('navigation.preview');
       showButton.id = `show_${post.guid}`;
       showButton.addEventListener('click', () => {
         state.modal.title = post.title;

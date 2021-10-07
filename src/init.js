@@ -30,16 +30,6 @@ const errors = {
   network: i18next.t('errors.network'), // Ошибка сети
 };
 
-const text = {
-  posts: i18next.t('content.posts'),
-  feeds: i18next.t('content.feeds'),
-  example: i18next.t('content.example'),
-  add: i18next.t('navigation.add'),
-  preview: i18next.t('navigation.preview'), // Просмотр
-  success: i18next.t('info.success'), // RSS успешно загружен
-
-};
-
 const updatePosts = (watchedState, timeout = 5000) => {
   const rssChanges = watchedState.urls.map((url) => downloadRSS(url)
     .then(({ items: newPosts }) => {
@@ -61,9 +51,9 @@ export default async () => {
     posts: [],
     error: null,
     isSuccess: null,
+    isLoading: false,
     modal: { title: '', content: '', link: '#' },
     readIds: new Set(),
-    text,
   };
   const elements = {
     input: document.querySelector('#url_input'),
@@ -88,6 +78,7 @@ export default async () => {
   const form = document.querySelector('#main_form');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    watchedState.isLoading = true;
     schema.validate(elements.input.value)
       .then(() => {
         if (watchedState.urls.includes(elements.input.value)) {
@@ -108,6 +99,9 @@ export default async () => {
         const type = err.type ?? 'network';
         watchedState.error = { type, message: errors[type] };
         watchedState.isSuccess = false;
+      })
+      .finally(() => {
+        watchedState.isLoading = false;
       });
   });
 
