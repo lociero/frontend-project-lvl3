@@ -7,5 +7,17 @@ export default {
       sameUrl: 'URL already exists in the list',
       network: 'Network error',
     },
+    content: {
+      posts: 'Posts',
+      feeds: 'Feeds',
+      example: 'Example: https://ru.hexlet.io/lessons.rss',
+    },
+    navigation: {
+      add: 'Add',
+      preview: 'Preview',
+    },
+    info: {
+      success: 'RSS downloaded successfully',
+    },
   },
 };

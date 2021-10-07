@@ -8,25 +8,36 @@ import 'bootstrap';
 import render from './view.js';
 import { downloadRSS } from './utils.js';
 import TypeError from './errors.js';
-import en from './locales/en.js';
+// import en from './locales/en.js';
+import ru from './locales/ru.js';
 
 // const yup = !y.object ? y.default : y;
 const schema = yup.string().url().required();
 
 i18next.init({
-  lng: 'en',
+  lng: 'ru',
   debug: true,
   resources: {
-    en,
+    ru,
   },
 });
 
 const errors = {
-  url: i18next.t('errors.url'),
-  required: i18next.t('errors.required'),
-  rss: i18next.t('errors.rss'),
-  sameUrl: i18next.t('errors.sameUrl'),
-  network: i18next.t('errors.network'),
+  url: i18next.t('errors.url'), // Ссылка должна быть валидным URL
+  required: i18next.t('errors.required'), // Не должно быть пустым
+  rss: i18next.t('errors.rss'), // Ресурс не содержит валидный RSS
+  sameUrl: i18next.t('errors.sameUrl'), // RSS уже существует
+  network: i18next.t('errors.network'), // Ошибка сети
+};
+
+const text = {
+  posts: i18next.t('content.posts'),
+  feeds: i18next.t('content.feeds'),
+  example: i18next.t('content.example'),
+  add: i18next.t('navigation.add'),
+  preview: i18next.t('navigation.preview'), // Просмотр
+  success: i18next.t('info.success'), // RSS успешно загружен
+
 };
 
 const updatePosts = (watchedState, timeout = 5000) => {
@@ -49,47 +60,56 @@ export default () => {
     feeds: [],
     posts: [],
     error: null,
+    isSuccess: null,
     modal: { title: '', content: '', link: '#' },
     readIds: new Set(),
+    text,
+  };
+  const elements = {
+    input: document.querySelector('#url_input'),
+    infoText: document.querySelector('#info_text'),
+    successText: document.querySelector('#success_text'),
+    feeds: document.querySelector('#feeds_list'),
+    posts: document.querySelector('#posts_list'),
+    feedsTitle: document.querySelector('#feeds_title'),
+    postsTitle: document.querySelector('#posts_title'),
+    addButton: document.querySelector('#add_button'),
+    exampleText: document.querySelector('#example_text'),
+
+    modalTitle: document.querySelector('#modal_title'),
+    modalContent: document.querySelector('#modal_body'),
+    modalLink: document.querySelector('#modal_link'),
   };
 
-  const input = document.querySelector('#url_input');
-  const errorText = document.querySelector('#error_text');
-  const feeds = document.querySelector('#feeds_list');
-  const posts = document.querySelector('#posts_list');
-
-  const modalTitle = document.querySelector('#modal_title');
-  const modalContent = document.querySelector('#modal_body');
-  const modalLink = document.querySelector('#modal_link');
-
-  const watchedState = onChange(state, () => render(watchedState, {
-    input, errorText, feeds, posts, modalTitle, modalContent, modalLink,
-  }));
+  const watchedState = onChange(state, () => render(watchedState, elements));
 
   // https://ru.hexlet.io/lessons.rss
   // http://lorem-rss.herokuapp.com/feed
   const form = document.querySelector('form');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    schema.validate(input.value)
+    schema.validate(elements.input.value)
       .then(() => {
-        if (watchedState.urls.includes(input.value)) {
+        if (watchedState.urls.includes(elements.input.value)) {
           throw new TypeError('sameUrl', 'url exists');
         }
-        return downloadRSS(input.value);
+        return downloadRSS(elements.input.value);
       })
       .then(({ title, description, items }) => {
-        watchedState.feeds.push({ title, description, url: input.value });
+        watchedState.feeds.push({ title, description, url: elements.input.value });
         watchedState.posts.push(...items);
-        watchedState.urls.push(input.value);
+        watchedState.urls.push(elements.input.value);
         watchedState.error = null;
+        watchedState.isSuccess = true;
       })
       .catch((err) => {
         console.error(err);
         const type = err.type ?? 'network';
         watchedState.error = { type, message: errors[type] };
+        watchedState.isSuccess = false;
       });
   });
 
+  render(watchedState, elements);
   updatePosts(watchedState);
 };

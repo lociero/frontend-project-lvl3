@@ -1,18 +1,34 @@
 /* eslint-disable no-param-reassign */
 const render = (state, elements) => {
   const {
-    input, errorText, feeds, posts, modalTitle, modalContent, modalLink,
+    input, infoText, feeds, posts, modalTitle, modalContent, modalLink,
   } = elements;
   input.classList.remove('is-invalid');
-  errorText.classList.add('d-none');
+  elements.feedsTitle.textContent = state.text.feeds;
+  elements.postsTitle.textContent = state.text.posts;
+  elements.addButton.textContent = state.text.add;
+  elements.exampleText.textContent = state.text.example;
   if (state.error) {
     if (state.error.type === 'url') {
       input.classList.add('is-invalid');
     }
-    errorText.textContent = state.error.message;
-    errorText.classList.remove('d-none');
+    infoText.textContent = state.error.message;
+    infoText.classList.remove('text-success');
+    infoText.classList.add('text-danger');
+    infoText.classList.remove('d-none');
     return;
   }
+  if (state.isSuccess) {
+    infoText.textContent = state.text.success;
+    infoText.classList.remove('text-danger');
+    infoText.classList.add('text-success');
+    infoText.classList.remove('d-none');
+  }
+
+  // infoText.classList.add('text-danger');
+  // elements.successText.classList.remove('d-none');
+  // elements.successText.textContent = state.text.success;
+
   const container = document.querySelector('#main_container');
   if (state.feeds.length > 0) {
     container.classList.remove('d-none');
@@ -41,7 +57,7 @@ const render = (state, elements) => {
       showButton.classList.add('btn', 'btn-primary', 'btn-sm');
       showButton.dataset.bsToggle = 'modal';
       showButton.dataset.bsTarget = '#modal';
-      showButton.textContent = 'Preview';
+      showButton.textContent = state.text.preview;
       showButton.id = `show_${post.guid}`;
       showButton.addEventListener('click', () => {
         state.modal.title = post.title;
