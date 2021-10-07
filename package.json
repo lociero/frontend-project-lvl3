@@ -19,7 +19,7 @@
     "verbose": true,
     "testURL": "http://localhost/"
   },
-  "main": "src/index.js",
+  "main": "src/init.js",
   "dependencies": {
     "@popperjs/core": "^2.10.2",
     "axios": "^0.21.4",
