@@ -16,19 +16,19 @@ test('form init', () => {
   expect(screen.getByTestId('form_test')).toBeInTheDocument();
 });
 
-// test('input init', () => {
-//   expect(screen.getByRole('textbox', { name: 'url' })).toBeInTheDocument();
-// });
+test('input init', () => {
+  expect(screen.getByRole('textbox', { name: 'url' })).toBeInTheDocument();
+});
 
-// test('validation (unique)', async () => {
-//   const rssUrl = 'https://ru.hexlet.io/lessons.rss';
-//   userEvent.type(screen.getByRole('textbox', { name: 'url' }), rssUrl);
-//   userEvent.click(screen.getByRole('button', { name: 'add' }));
+test('validation (unique)', async () => {
+  const rssUrl = 'https://ru.hexlet.io/lessons.rss';
+  userEvent.type(screen.getByRole('textbox', { name: 'url' }), rssUrl);
+  userEvent.click(screen.getByRole('button', { name: 'add' }));
 
-//   expect(await screen.findByText(/RSS успешно загружен/i)).toBeInTheDocument();
+  expect(await screen.findByText(/RSS успешно загружен/i)).toBeInTheDocument();
 
-//   userEvent.type(screen.getByRole('textbox', { name: 'url' }), rssUrl);
-//   userEvent.click(screen.getByRole('button', { name: 'add' }));
+  userEvent.type(screen.getByRole('textbox', { name: 'url' }), rssUrl);
+  userEvent.click(screen.getByRole('button', { name: 'add' }));
 
-//   expect(await screen.findByText(/RSS уже существует/i)).toBeInTheDocument();
-// });
+  expect(await screen.findByText(/RSS уже существует/i)).toBeInTheDocument();
+});
